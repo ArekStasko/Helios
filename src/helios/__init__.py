@@ -19,8 +19,11 @@ try:
 
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-        lower_red = np.array([0, 100, 100])
-        upper_red = np.array([10, 255, 255])
+        lower_red_00 = np.array([0, 100, 100])
+        upper_red_00 = np.array([10, 255, 255])
+
+        lower_red_01 = np.array([0, 100, 100])
+        upper_red_01 = np.array([10, 255, 255])
 
         lower_green = np.array([35, 100, 100])
         upper_green = np.array([85, 255, 255])
@@ -28,12 +31,14 @@ try:
         lower_blue = np.array([110,50,50])
         upper_blue = np.array([130,255,255])
 
-        mask = cv2.inRange(hsv, lower_red, upper_red)
+        redLowMask = cv2.inRange(hsv, lower_red_00, upper_red_00)
+        redUpMask = cv2.inRange(hsv, lower_red_01, upper_red_01)
+        greenMask = cv2.inRange(hsv, lower_green, upper_green)
+        blueMask = cv2.inRange(hsv, lower_blue, upper_blue)
 
-        res = cv2.bitwise_and(frame, frame, mask=mask)
+        res = cv2.bitwise_or(redLowMask, greenMask, blueMask)
 
         cv2.imshow('frame', frame)
-        cv2.imshow('mask', mask)
         cv2.imshow('res', res)
 
         k = cv2.waitKey(5) & 0xFF
